@@ -1,0 +1,68 @@
+---
+/**
+ * The wordmark (or icon with `mark`): clean at rest, resolving out of pixel
+ * blocks on load, replaying on hover. Without `width` it fills its container's
+ * width; the box keeps the logo's proportions either way.
+ */
+import {
+  LOGO_ICON_ACCENT,
+  LOGO_ICON_RATIO,
+  LOGO_ICON_URL,
+  LOGO_TEXT_RATIO,
+  LOGO_TEXT_URL,
+} from "../dist/core/assets.js"
+
+interface Props {
+  mark?: boolean
+  width?: number
+  class?: string
+  label?: string
+}
+
+const { mark = false, width, class: className, label = "RINCI" } = Astro.props
+const src = mark ? LOGO_ICON_URL : LOGO_TEXT_URL
+const ratio = mark ? LOGO_ICON_RATIO : LOGO_TEXT_RATIO
+const size = width ? `width:${width}px;` : "width:100%;"
+const a = LOGO_ICON_ACCENT
+---
+
+<span
+  class:list={["rinci-pixel-logo", className]}
+  data-rinci-logo={mark ? "mark" : "text"}
+  role="img"
+  aria-label={label}
+  style={`${size}aspect-ratio:${ratio};`}
+>
+  <span
+    data-pixel-ink
+    aria-hidden="true"
+    style={`-webkit-mask:url("${src}") no-repeat center / contain;mask:url("${src}") no-repeat center / contain;`}
+  ></span>
+  {
+    mark && (
+      <span
+        data-pixel-accent
+        aria-hidden="true"
+        style={`left:${a.left * 100}%;top:${a.top * 100}%;width:${a.width * 100}%;height:${a.height * 100}%;`}
+      />
+    )
+  }
+  <canvas data-pixel-canvas aria-hidden="true"></canvas>
+</span>
+<script is:inline>
+  // Synchronous, so the clean mark never flashes before the pixel entrance.
+  ;(function (logo) {
+    if (!logo || matchMedia("(prefers-reduced-motion: reduce)").matches) return
+    logo.dataset.state = "pending"
+  })(document.currentScript && document.currentScript.previousElementSibling)
+</script>
+
+<script>
+  import { mountPixelLogo } from "../dist/core/index.js"
+
+  document.querySelectorAll<HTMLElement>("[data-rinci-logo]").forEach((logo) => {
+    if (logo.dataset.mounted) return
+    logo.dataset.mounted = ""
+    mountPixelLogo(logo, { mark: logo.dataset.rinciLogo === "mark" })
+  })
+</script>

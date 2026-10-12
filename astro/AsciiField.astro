@@ -1,0 +1,24 @@
+---
+/**
+ * The RINCI mark in ASCII. Fills its parent; size and place the parent.
+ * Requires `@rinci/brand/components.css` (or `tailwind.css`) on the page.
+ */
+interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+---
+
+<canvas class:list={["rinci-ascii-field", className]} data-rinci-ascii aria-hidden="true"
+></canvas>
+
+<script>
+  import { mountAsciiField } from "../dist/core/index.js"
+
+  document.querySelectorAll<HTMLCanvasElement>("[data-rinci-ascii]").forEach((canvas) => {
+    if (canvas.dataset.mounted) return
+    canvas.dataset.mounted = ""
+    mountAsciiField(canvas).catch(() => canvas.remove())
+  })
+</script>

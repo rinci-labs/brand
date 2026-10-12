@@ -1,0 +1,118 @@
+/*
+ * @rinci/brand — plain CSS, no Tailwind required.
+ *
+ * Fonts, the colour variables, and the styles the PixelLogo and AsciiField
+ * components depend on. `tailwind.css` imports this and adds the theme and
+ * utilities on top.
+ */
+
+@font-face {
+  font-family: 'Geist';
+  src: url('./fonts/Geist-Variable.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 100 900;
+}
+
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('./fonts/GeistMono-Variable.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 100 900;
+}
+
+@font-face {
+  font-family: 'Geist Pixel';
+  src: url('./fonts/GeistPixel-Square.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 400;
+}
+
+:root {
+  --rinci-ink: #0a0b0a;
+  --rinci-ink-2: #101210;
+  --rinci-paper: #f4f5f3;
+  --rinci-dim: #9aa09a;
+  --rinci-faint: #62675f;
+  --rinci-line: #1e211e;
+  /* The single accent. Muted on purpose: saturated phosphor green reads as
+     terminal cosplay. */
+  --rinci-signal: #6fbf95;
+}
+
+/* ASCII field: fills its parent and fades in once the first frame is drawn. */
+.rinci-ascii-field {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 900ms ease-out;
+}
+
+.rinci-ascii-field[data-ready] {
+  opacity: 1;
+}
+
+/* Pixel logo: a clean masked mark, with a canvas on top for the entrance. */
+.rinci-pixel-logo {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.rinci-pixel-logo > [data-pixel-ink],
+.rinci-pixel-logo > [data-pixel-canvas] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.rinci-pixel-logo > [data-pixel-ink] {
+  background-color: var(--rinci-paper);
+}
+
+.rinci-pixel-logo > [data-pixel-accent] {
+  position: absolute;
+  background-color: var(--rinci-signal);
+}
+
+.rinci-pixel-logo > [data-pixel-canvas] {
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+
+.rinci-pixel-logo:is([data-state='pending'], [data-state='pixel']) > [data-pixel-ink],
+.rinci-pixel-logo:is([data-state='pending'], [data-state='pixel']) > [data-pixel-accent] {
+  opacity: 0;
+}
+
+@keyframes rinci-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes rinci-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* On, off, on, like a cursor. For the head of a progress bar. */
+@keyframes rinci-blink {
+  50% {
+    opacity: 0.25;
+  }
+}

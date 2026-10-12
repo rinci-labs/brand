@@ -1,0 +1,69 @@
+{
+  "name": "@rinci/brand",
+  "version": "0.1.0",
+  "description": "RINCI brand system: colours, fonts, the ASCII mark and the pixel logo, for Tailwind v4, React and Astro.",
+  "license": "MIT",
+  "author": "Rafa Al Razzak",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rinci-labs/brand.git"
+  },
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "files": [
+    "dist",
+    "astro",
+    "fonts",
+    "assets",
+    "components.css",
+    "tailwind.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/core/index.d.ts",
+      "default": "./dist/core/index.js"
+    },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "default": "./dist/react/index.js"
+    },
+    "./astro/AsciiField.astro": "./astro/AsciiField.astro",
+    "./astro/PixelLogo.astro": "./astro/PixelLogo.astro",
+    "./components.css": "./components.css",
+    "./tailwind.css": "./tailwind.css",
+    "./fonts/*": "./fonts/*",
+    "./assets/*": "./assets/*",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "bun run build"
+  },
+  "peerDependencies": {
+    "astro": ">=5",
+    "react": ">=18",
+    "tailwindcss": ">=4"
+  },
+  "peerDependenciesMeta": {
+    "astro": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "tailwindcss": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "react": "^19.2.8",
+    "typescript": "^5.9.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
